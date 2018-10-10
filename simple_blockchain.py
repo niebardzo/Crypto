@@ -16,7 +16,7 @@ class Block:
 
 	def generate_hash(self):
 		sha256 = hashlib.sha256()
-		sha256.update(str(self.timestamp)+str(self.data)+str(self.previous_block_hash))
+		sha256.update((str(self.timestamp)+str(self.data)+str(self.previous_block_hash)).encode('utf-8'))
 		return sha256.hexdigest()
 
 
@@ -27,9 +27,8 @@ def create_block(last_block, data):
 
 # Create a first Block in Blockchain
 blockchain = [Block(timestamp=datetime.datetime.now(), data="First Block", previous_block_hash="0")]
-i = 0
 while True:
-	new_block = create_block(blockchain[i], "Adding new block to blockchain" + str(i+1))
+	new_block = create_block(blockchain[-1], "Adding new block to blockchain")
 	blockchain.append(new_block)
 	print("Block created at {} with the hash {}".format(new_block.timestamp, new_block.hash))
 	time.sleep(0.5)
