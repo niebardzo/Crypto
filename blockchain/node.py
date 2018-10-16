@@ -34,9 +34,12 @@ class Block:
 
 
 class Blockchain:
-	def __init__(self, difficulty):
+	def __init__(self, difficulty = None):
 		self.chain = []
-		self.difficulty = difficulty
+		if difficulty is None:
+			self.difficulty = 3
+		else:
+			self.difficulty = difficulty
 
 
 	def create_first_block(self):
@@ -54,6 +57,8 @@ class Blockchain:
 		new_block = Block(datetime.datetime.now(), data, self.get_last_block_hash())
 		new_block.mine_block(self.difficulty)
 		self.chain.append(new_block)
+		if len(self.chain)%10 == 0:
+			self.difficulty = self.difficulty + 1
 
 
 	def check_chain_validity(self):
@@ -112,7 +117,7 @@ trans_schema = {
 	'required': ['from', 'to', 'amount']
 	}
 
-coin = Blockchain(5)
+coin = Blockchain()
 coin.create_first_block()
 coin.reach_consensus()
 
