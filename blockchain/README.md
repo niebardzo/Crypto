@@ -32,7 +32,7 @@ Export the FLASK_APP env variable and run flask.
 
 ```
 export FLASK_APP=node.py
-flask run
+flask run --port=5000
 ```
 
 The node should be running on your machine on default port.
@@ -83,15 +83,17 @@ In the current form the consensus algorythm is rather simple. Before adding the 
 The method which implements the consesus is the part of Blockchain class:
 
 ```
-def reach_consensus(self):
-		for url in peers:
-			blocks = requests.get(url + '/get_blockchain').body
-			blocks = json.loads(blocks)
+	def reach_consensus(self):
+		for peer in peers:
+			url = "http://"+ str(peer["ip"]) + ":" + str(peer["port"])
+			try:
+				blocks = requests.get(url + '/get_blockchain').json()
+			except requests.RequestException:
+				continue
 			if len(blocks) > len(self.chain):
 				new_blockchain = Blockchain(self.difficulty)
 				for block in blocks:
-					block = json.loads(block)
-					new_blockchain.chain.append(Block(block.timestamp, block.data, block.previous_block_hash))
+					new_blockchain.chain.append(Block(block["timestamp"], block["data"], block["previous_block_hash"], block["nonce"]))
 				if new_blockchain.check_chain_validity():
 					self.chain = new_blockchain.chain
 
@@ -117,8 +119,8 @@ def mine_block(self, difficulty):
 
 ## Plans for the future:
 
-- [ ] Implement reading miner wallet address from the config file.
-- [ ] Implement reading nodes in the network from config file.
+- [x] Implement reading miner wallet address from the config file.
+- [x] Implement reading nodes in the network from config file.
 - [ ] Write unit tests.
 - [ ] Implement better algorythm for consensus.
 - [ ] Implement difficulty growth
