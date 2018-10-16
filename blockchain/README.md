@@ -37,6 +37,31 @@ flask run --port=5000
 
 The node should be running on your machine on default port.
 
+## Config File
+
+The config file could be found under the name **config.json**. The following schema should be used:
+
+```
+{
+	"wallet": "<Miner_wallet>",
+	"peers": [{
+			"ip": "<ip_of_node>",
+			"port": "<port_of_node>"
+		},
+		{
+			"ip": "<ip_of_node>",
+			"port": "<port_of_node>"
+		},
+		{
+			"ip": "<ip_of_node>",
+			"port": "<port_of_node>"
+		}
+	]
+}
+```
+
+You could add or delete as many peers as it is needed. In a basic configuration I have added 3 nodes on localhost, then run the application in 3 terminals on different ports.
+
 ## How to communicate with the node?
 
 The communication with the node is establish using HTTP, to make HTTP request I will use **curl**. The node contains of 3 HTTP endpoints:
