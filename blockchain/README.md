@@ -34,11 +34,41 @@ The node should be running on your machine on default port.
 ## How to communicate with the node?
 
 The communication with the node is establish using HTTP, to make HTTP request I will use **curl**. The node contains of 3 HTTP endpoints:
+
 **1. /trans**
+
+This endpoint is to send the transaction. It should be send in the specific json schema:
+```
+trans_schema = {
+	'type' : 'object',
+	'properties': {
+	'from': {'type': 'string'},
+	'to': {'type': 'string'},
+	'amount':{'type': 'number'}
+	},
+	'required': ['from', 'to', 'amount']
+	}
+```
+The curl example which sends amount of **100** coins from ***wallet1** to **wallet2**:
+
+```
+curl "localhost:5000/trans" -X POST -H "Content-Type: application/json" -d '{"from": "wallet1", "to": "wallet2", "amount": 100}'
+
+```
 
 **2. /mine**
 
+This endpoint was created to start a proccess of mining a new block. To mine a new block simply make a GET request to that endpoint:
+```
+curl "localhost:5000/mine" -X GET
+```
+
 **3. /get_blockchain**
+
+This endpoint was created to exchange information about blockchain between nodes. To retrive the whole blockchain send a GET request to this endpoint:
+```
+curl "localhost:5000/get_blockchain" -X GET
+```
 
 
 ## How is the consensus made?
@@ -83,6 +113,6 @@ def mine_block(self, difficulty):
 
 - [ ] Implement reading miner wallet address from the config file.
 - [ ] Implement reading nodes in the network from config file.
-- [ ] Implement the script which will run several nodes, clients making transaction and node which will be spoofing blockchain (false node).
+- [ ] Write unit tests.
 - [ ] Implement better algorythm for consensus.
 - [ ] Implement difficulty growth
