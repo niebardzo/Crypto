@@ -1,4 +1,4 @@
-# Intruduction
+# Flask Blockchain
 
 ## What is the project?
 
@@ -106,7 +106,7 @@ The proof of work is done the same as in the bitcoin algorythm. To mine the new 
 - Timestamp,
 - Transactions data,
 - Previous block hash,
-**- Special number.**
+- Special number.
 
 So the work which needs to be done is to find the special number which will result in the hash with **number** of 0 in the beginning (difficulty).
 The method of Block class which implements that behaviour is below:
