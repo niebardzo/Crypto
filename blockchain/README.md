@@ -55,7 +55,7 @@ trans_schema = {
 	'required': ['from', 'to', 'amount']
 	}
 ```
-The curl example which sends amount of **100** coins from ***wallet1** to **wallet2**:
+The curl example which sends amount of **100** coins from **wallet1** to **wallet2**:
 
 ```
 curl "localhost:5000/trans" -X POST -H "Content-Type: application/json" -d '{"from": "wallet1", "to": "wallet2", "amount": 100}'
