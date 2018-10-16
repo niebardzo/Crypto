@@ -16,8 +16,14 @@ It is able to mine new block and add it to the blockchain.
 All requirements are specified in Pipfile. The best way to install is using **pipenv** being in the folder with Pipfile.
 
 ```
-pipenv install
+pipenv install --dev
 pipenv shell
+```
+
+Or use standard pip3:
+
+```
+pip3 install --requirements
 ```
 
 ## Running the node
