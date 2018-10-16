@@ -41,6 +41,7 @@ class Blockchain:
 
 	def create_first_block(self):
 		first_block = Block(datetime.datetime.now(), "First Block", "0")
+		first_block.mine_block(self.difficulty)
 		self.chain.append(first_block)
 
 
@@ -75,13 +76,11 @@ class Blockchain:
 			except requests.RequestException:
 				continue
 			if len(blocks) > len(self.chain):
-				print("Correct")
 				new_blockchain = Blockchain(self.difficulty)
 				for block in blocks:
 					new_blockchain.chain.append(Block(block["timestamp"], block["data"], block["previous_block_hash"], block["nonce"]))
 				if new_blockchain.check_chain_validity():
 					self.chain = new_blockchain.chain
-					print(self.chain)
 
 
 
