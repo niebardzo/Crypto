@@ -142,10 +142,19 @@ def mine_block(self, difficulty):
 			self.hash = self.generate_hash()
 ```
 
+## Tests
+
+To run tests, **pytest** has to be installed. Then go to project directory and type:
+
+```
+pytest
+```
+
+
 ## Plans for the future:
 
 - [x] Implement reading miner wallet address from the config file.
 - [x] Implement reading nodes in the network from config file.
-- [ ] Write unit tests.
+- [x] Write unit tests.
 - [ ] Implement better algorythm for consensus.
-- [ ] Implement difficulty growth
+- [x] Implement difficulty growth
