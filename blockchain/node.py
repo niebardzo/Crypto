@@ -9,11 +9,14 @@ import json
 
 
 class Block:
-	def __init__(self, timestamp, data, previous_block_hash):
+	def __init__(self, timestamp, data, previous_block_hash, nonce = None):
 		self.timestamp = timestamp
 		self.data = data
 		self.previous_block_hash = previous_block_hash
-		self.nonce = 0
+		if nonce is None:
+			self.nonce = 0
+		else:
+			self.nonce = nonce
 		self.hash = self.generate_hash()
 		
 
@@ -65,28 +68,39 @@ class Blockchain:
 
 
 	def reach_consensus(self):
-		for url in peers:
-			blocks = requests.get(url + '/get_blockchain').body
-			blocks = json.loads(blocks)
+		for peer in peers:
+			url = "http://"+ str(peer["ip"]) + ":" + str(peer["port"])
+			try:
+				blocks = requests.get(url + '/get_blockchain').json()
+			except requests.RequestException:
+				continue
 			if len(blocks) > len(self.chain):
+				print("Correct")
 				new_blockchain = Blockchain(self.difficulty)
 				for block in blocks:
-					block = json.loads(block)
-					new_blockchain.chain.append(Block(block.timestamp, block.data, block.previous_block_hash))
+					new_blockchain.chain.append(Block(block["timestamp"], block["data"], block["previous_block_hash"], block["nonce"]))
 				if new_blockchain.check_chain_validity():
 					self.chain = new_blockchain.chain
+					print(self.chain)
 
 
 
 node = Flask(__name__)
 
+with open("config.json", "r") as config:
+	try:
+		config_file = json.loads(config.read())
+	except json.decoder.JSONDecodeError:
+		print("Wrong config file.")
+		exit()
+
 nodes_transactions = []
 
 #From Configuration file
-miner_wallet = "MINERSWALLETADDRESS"
+miner_wallet = config_file["wallet"]
 
 #From configuration file.
-peers = []
+peers = config_file["peers"]
 
 
 trans_schema = {
@@ -137,7 +151,8 @@ def get_blockchain():
 		block_to_send = {
 			'timestamp': str(block.timestamp),
 			'data': str(block.data),
-			'previous_block_hash': str(block.previous_block_hash)
+			'previous_block_hash': str(block.previous_block_hash),
+			'nonce': str(block.nonce)
 		}
 		blockchain_to_send.append(block_to_send)
 	return json.dumps(blockchain_to_send)
