@@ -9,6 +9,8 @@ import json
 
 
 class Block:
+	"""The class which implements the block in the blockchain behaviour. The block consists of timestamp, data, prvious block hash, special number,
+	 and hash of the block itself."""
 	def __init__(self, timestamp, data, previous_block_hash, nonce = None):
 		self.timestamp = timestamp
 		self.data = data
@@ -28,32 +30,37 @@ class Block:
 
 
 	def mine_block(self, difficulty):
+		"""Find a special number which will generate the hash of the whole block if appropiate number of 0 at the beggining, based on difficulty."""
 		while self.hash[:int(difficulty)] != '0'* int(difficulty):
 			self.nonce += 1
 			self.hash = self.generate_hash()
 
 
 class Blockchain:
+	"""Blockchain class with inital difficulty value of 2."""
 	def __init__(self, difficulty = None):
 		self.chain = []
 		if difficulty is None:
-			self.difficulty = 3
+			self.difficulty = 2
 		else:
 			self.difficulty = difficulty
 
 
 	def create_first_block(self):
+		"""Method to create first genesis block and append it to the blockchain."""
 		first_block = Block(datetime.datetime.now(), "First Block", "0")
 		first_block.mine_block(self.difficulty)
 		self.chain.append(first_block)
 
 
 	def get_last_block_hash(self):
+		"""Method to retrive latest block in the blockchain."""
 		last_block = self.chain[-1]
 		return last_block.hash
 
 
 	def add_block(self, data):
+		"""Method to add new block to the blockchain and grow the difficulty in every 10 mined blocks."""
 		new_block = Block(datetime.datetime.now(), data, self.get_last_block_hash())
 		new_block.mine_block(self.difficulty)
 		self.chain.append(new_block)
@@ -62,6 +69,7 @@ class Blockchain:
 
 
 	def check_chain_validity(self):
+		"""Checks the validity of every block in the blockchain"""
 		for i in range(1 ,len(self.chain)):
 			current_block = self.chain[i]
 			previous_block = self.chain[i-1]
@@ -74,6 +82,7 @@ class Blockchain:
 
 
 	def reach_consensus(self):
+		"""Connects to all the peers in networks and finds the longest valid blockchain."""
 		for peer in peers:
 			url = "http://"+ str(peer["ip"]) + ":" + str(peer["port"])
 			try:
