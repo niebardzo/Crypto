@@ -9,6 +9,7 @@ name = "pypi"
 flask = "*"
 flask-expects-json = "*"
 requests = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.6"
