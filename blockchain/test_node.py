@@ -29,7 +29,7 @@ class TestBlock(object):
 		assert block.hash[:int(difficulty)] == '0'* int(difficulty)
 
 
-class TestBlockchain(objet):
+class TestBlockchain(object):
 	
 	def test_check_chain_validity(self):
 		pass
