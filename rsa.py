@@ -123,11 +123,11 @@ class Private_key:
 
 try:
 	length = input("What is the key length? ")
-	if length.isalpha():
+	if not length.isdigit():
 		raise ValueError
 	public, private = generate_pair_of_keys(int(length))
 	message = input("Type message: ")
-	if not message.isalpha():
+	if not message.isalnum():
 		raise ValueError
 	encrypted = public.encrypt(str(message))
 	print(''.join(map(lambda x: str(x), encrypted)))
